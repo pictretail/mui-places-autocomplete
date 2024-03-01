@@ -166,6 +166,7 @@ export default class MUIPlacesAutocomplete extends React.Component {
 
     this.onInputValueChange = this.onInputValueChange.bind(this)
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this)
+    this.onAutocompleteFailure = this.onAutocompleteFailure.bind(this)
     this.renderAutocomplete = this.renderAutocomplete.bind(this)
   }
 
@@ -198,6 +199,7 @@ export default class MUIPlacesAutocomplete extends React.Component {
         // If the response doesn't contain a valid result then set our state as if no suggestions
         // were returned
         if (serviceStatus !== window.google.maps.places.PlacesServiceStatus.OK) {
+          this.onAutocompleteFailure(serviceStatus);
           this.setState({ suggestions: [] })
           return
         }
@@ -220,6 +222,14 @@ export default class MUIPlacesAutocomplete extends React.Component {
 
     if (onSuggestionSelected) {
       onSuggestionSelected(suggestion)
+    }
+  }
+
+  onAutocompleteFailure(serviceStatus) {
+    const { onAutocompleteFailure } = this.props
+
+    if (onAutocompleteFailure) {
+      onAutocompleteFailure(serviceStatus)
     }
   }
 
